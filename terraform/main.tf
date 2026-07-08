@@ -1,5 +1,5 @@
 resource "aws_security_group" "ssh" {
-  name = "terraform-ssh-"
+  name_prefix = "terraform-ssh-"
 
   # SSH
   ingress {
