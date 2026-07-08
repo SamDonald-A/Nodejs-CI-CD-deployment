@@ -11,5 +11,5 @@ variable "ami" {
 }
 
 variable "key_name" {
-  description = "Existing AWS Key Pair"
+  default = "test"
 }
