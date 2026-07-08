@@ -1,0 +1,43 @@
+---
+- name: Configure EC2
+  hosts: servers
+  become: yes
+
+  tasks:
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install packages
+      apt:
+        name:
+          - git
+          - docker.io
+          - docker-compose-v2
+        state: present
+
+    - name: Enable Docker
+      service:
+        name: docker
+        enabled: yes
+        state: started
+
+    - name: Add ubuntu user to docker group
+      user:
+        name: ubuntu
+        groups: docker
+        append: yes
+
+    - name: Clone Git repository
+      git:
+        repo: "https://github.com/SamDonald-A/sample-nodejs-app.git"
+        dest: /home/ubuntu/app
+        version: main
+
+    - name: Deploy application
+      command: docker compose up -d --build
+      args:
+        chdir: /home/ubuntu/app
+
+# ansible-playbook -i inventory.ini install.yml

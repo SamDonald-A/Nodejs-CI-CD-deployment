@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+<h2>Docker Demo - Reminder App - Git Action Competed </h2>
+
+<input id="name">
+
+<button onclick="save()">
+Add Reminder
+</button>
+
+<ul id="users"></ul>
+
+<script>
+
+async function load(){
+
+const data = await fetch("http://13.62.56.213:5000/users");
+
+const users = await data.json();
+
+document.getElementById("users").innerHTML =
+users.map(u=>`<li>${u.name}</li>`).join("");
+
+}
+
+async function save(){
+
+const name=document.getElementById("name").value;
+
+await fetch("http://13.62.56.213:5000/users",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({name})
+
+});
+
+load();
+
+}
+
+load();
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    environment:
+      MONGO_URL: mongodb://mongodb:27017/dockerdemo
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:7
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+
+  mongo-data:
