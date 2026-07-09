@@ -1,5 +1,5 @@
 resource "aws_security_group" "ssh" {
-  name = "terraform-sam-1"
+  name = "terraform-sam-2"
 
   # SSH
   ingress {
@@ -48,7 +48,7 @@ resource "aws_instance" "server" {
   vpc_security_group_ids = [aws_security_group.ssh.id]
 
   tags = {
-    Name = "New-Ansible-Server"
+    Name = "Ansible-Remote-State"
   }
 }
 
