@@ -7,7 +7,7 @@ variable "instance_type" {
 }
 
 variable "ami" {
-  default = "ami-0aba19e56f3eaec05" # Ubuntu 24.04 LTS (example)
+  default = "ami-0aba19e56f3eaec05"
 }
 
 variable "key_name" {
