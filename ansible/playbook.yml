@@ -9,7 +9,7 @@
       apt:
         update_cache: yes
 
-    - name: Install packages
+    - name: Install required packages
       apt:
         name:
           - git
@@ -17,7 +17,7 @@
           - docker-compose-v2
         state: present
 
-    - name: Enable Docker
+    - name: Enable and start Docker
       service:
         name: docker
         enabled: yes
@@ -29,9 +29,25 @@
         groups: docker
         append: yes
 
-    - name: Deploy Application
+    - name: Reset SSH connection to apply docker group
+      meta: reset_connection
+
+    - name: Build and start application
       command: docker compose up -d --build
       args:
         chdir: /home/ubuntu/app
+
+    - name: Wait for API to become available
+      uri:
+        url: http://localhost/api/users
+        status_code: 200
+      register: result
+      retries: 20
+      delay: 5
+      until: result.status == 200
+
+    - name: Display deployment status
+      debug:
+        msg: "Application deployed successfully!"
 
 # ansible-playbook -i inventory.ini install.yml
