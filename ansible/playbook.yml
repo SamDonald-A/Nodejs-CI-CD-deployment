@@ -38,11 +38,12 @@
         chdir: /home/ubuntu/app
 
     - name: Wait for backend container
-      shell: docker inspect --format='{{.State.Health.Status}}' backend
+      shell: >
+        docker inspect --format='{{ "{{.State.Health.Status}}" }}' backend
       register: backend_health
       retries: 30
       delay: 5
-      until: backend_health.stdout == "healthy"
+      until: backend_health.stdout | trim == "healthy"
 
     - name: Restart nginx
       command: docker compose restart nginx
