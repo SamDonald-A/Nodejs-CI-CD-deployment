@@ -37,6 +37,18 @@
       args:
         chdir: /home/ubuntu/app
 
+    - name: Wait for backend container
+      shell: docker inspect --format='{{.State.Health.Status}}' backend
+      register: backend_health
+      retries: 30
+      delay: 5
+      until: backend_health.stdout == "healthy"
+
+    - name: Restart nginx
+      command: docker compose restart nginx
+      args:
+        chdir: /home/ubuntu/app
+
     - name: Wait for API to become available
       uri:
         url: http://localhost/api/users
